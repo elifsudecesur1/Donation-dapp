@@ -1,0 +1,193 @@
+İşte proje için detaylı bir **README** dosyası:
+
+---
+
+# Charity Chain dApp
+
+**Charity Chain** projesi, kullanıcıların bağış yapabileceği, projeleri destekleyebileceği, NFT'ler kazanabileceği, staking ile gelir elde edebileceği ve topluluk oylamalarıyla karar verebileceği **decentralized application (dApp)**'tir. Bu proje, **CosmWasm** üzerine kuruludur ve çeşitli akıllı kontrat modülleri ile yapılandırılmıştır. Charity Chain, **NFT minting**, **staking**, **yönetişim (DAO)** ve **milestone bazlı fon serbest bırakma** gibi işlevleri içermektedir.
+
+## İçindekiler
+
+- [Proje Özeti](#proje-özeti)
+- [Özellikler](#özellikler)
+- [Proje Yapısı](#proje-yapısı)
+- [Kurulum ve Çalıştırma](#kurulum-ve-çalıştırma)
+- [Kontratlar](#kontratlar)
+  - [NFT Kontratı](#nft-kontratı)
+  - [Staking Kontratı](#staking-kontratı)
+  - [Yönetişim Kontratı](#yönetişim-kontratı)
+  - [Milestone Kontratı](#milestone-kontratı)
+- [Testler](#testler)
+- [Dağıtım](#dağıtım)
+- [Katkıda Bulunma](#katkıda-bulunma)
+- [Lisans](#lisans)
+
+---
+
+## Proje Özeti
+
+Charity Chain, bağış projelerine odaklanmış topluluk temelli bir platformdur. Kullanıcılar projelere bağış yaparak özel **NFT'ler** kazanır, fonlarını stake ederek **getiri** elde edebilir ve projelerin ilerleyişi hakkında **topluluk oylamaları** ile karar verebilir. Her proje **milestone** bazında yönetilir ve topluluk tarafından onaylanan her aşama için fonlar serbest bırakılır.
+
+---
+
+## Özellikler
+
+- **NFT Minting**: Bağış yapan kullanıcılar, bağışlarının miktarına ve özelliklerine göre özelleştirilebilir NFT'ler kazanır.
+- **Staking**: Kullanıcılar bağışlarını stake ederek yıllık gelir elde edebilirler.
+- **Yönetişim (DAO)**: Topluluk, projelerin nasıl yönetileceğine dair kararlar almak için oy verebilir.
+- **Milestone Bazlı Fon Dağıtımı**: Projeler, belirli kilometre taşlarına ulaştıkça fonlar serbest bırakılır.
+- **Modüler Yapı**: Her kontrat bağımsız olarak çalışır ve geliştirilebilir.
+
+---
+
+## Proje Yapısı
+
+```bash
+charity-chain/
+├── contracts/
+│   ├── nft_contract/                 # NFT ile ilgili kontratlar
+│   ├── staking_contract/             # Staking ile ilgili kontratlar
+│   ├── governance_contract/          # Yönetişim ile ilgili kontratlar
+│   ├── milestone_contract/           # Milestone bazlı fon serbest bırakma kontratları
+├── scripts/                          # Dağıtım ve dev ops betikleri
+│   ├── deploy_contracts.sh           # Tüm kontratların dağıtım betiği
+├── README.md                         # Proje hakkında genel bilgi
+```
+
+### Modüller
+
+Her modül ayrı bir kontrat olarak yapılandırılmıştır:
+
+1. **NFT Kontratı**: NFT minting ve özelleştirme işlevleri.
+2. **Staking Kontratı**: Fon stake etme ve getiri hesaplama.
+3. **Yönetişim Kontratı (DAO)**: Oylamalar ve topluluk kararları.
+4. **Milestone Kontratı**: Proje kilometre taşlarına ulaşıldığında fon serbest bırakma.
+
+---
+
+## Kurulum ve Çalıştırma
+
+Proje, CosmWasm kontratları ve CosmWasm CLI kullanılarak geliştirildi. Kurulum için aşağıdaki adımları izleyin:
+
+### Gereksinimler
+
+- [Rust](https://www.rust-lang.org/tools/install)
+- [CosmWasm CLI](https://docs.cosmwasm.com/docs/1.0/getting-started/installation)
+- [Docker](https://docs.docker.com/get-docker/)
+
+### Adım 1: Depoyu Klonlayın
+
+```bash
+git clone https://github.com/yourusername/charity-chain.git
+cd charity-chain
+```
+
+### Adım 2: Akıllı Kontratları Derleyin
+
+Her kontratı bağımsız olarak derleyebilir veya dağıtım scriptini kullanabilirsiniz.
+
+```bash
+cd contracts/nft_contract
+cargo wasm
+
+cd ../staking_contract
+cargo wasm
+
+cd ../governance_contract
+cargo wasm
+
+cd ../milestone_contract
+cargo wasm
+```
+
+---
+
+## Kontratlar
+
+### 1. **NFT Kontratı**
+
+Bu kontrat, bağış yapan kullanıcılar için özelleştirilebilir NFT'ler mint eder. Her NFT, kullanıcıların bağış miktarına göre farklı özellikler taşır.
+
+- **MintNft**: Yeni bir NFT mint etme.
+- **Transfer**: NFT transfer işlemleri.
+- **State**: Her bir NFT'nin depolandığı yapı.
+
+### 2. **Staking Kontratı**
+
+Kullanıcıların fonlarını stake edebilecekleri ve getiri elde edebilecekleri kontrat.
+
+- **StakeFunds**: Kullanıcıların belirli miktarda fonu stake etmesini sağlar.
+- **ClaimRewards**: Stake edilen fonlar üzerinden getiri elde eder.
+- **State**: Kullanıcıların staking bilgileri.
+
+### 3. **Yönetişim Kontratı (DAO)**
+
+Topluluk tarafından projelere dair kararlar alınabilir. Projelerin yeni özellikleri veya hedefleri hakkında topluluk oylaması yapılır.
+
+- **CreateProposal**: Yeni bir öneri oluşturma.
+- **VoteOnProposal**: Bir öneriye oy verme.
+- **State**: Oylamalar ve önerilerle ilgili bilgiler.
+
+### 4. **Milestone Kontratı**
+
+Projeler belirli kilometre taşlarına ulaştıkça fonlar serbest bırakılır. Topluluk oylamalarıyla onaylanan milestone'lar doğrultusunda fon dağıtımı yapılır.
+
+- **CreateMilestone**: Yeni bir milestone oluşturma.
+- **ReleaseFunds**: Bir milestone tamamlandığında fonları serbest bırakır.
+- **State**: Proje milestone bilgileri.
+
+---
+
+## Testler
+
+Her kontrat için birim ve entegrasyon testleri mevcuttur.
+
+### Testleri Çalıştırma
+
+Her bir kontrat için testleri bağımsız olarak çalıştırabilirsiniz.
+
+```bash
+cd contracts/nft_contract
+cargo test
+
+cd ../staking_contract
+cargo test
+
+cd ../governance_contract
+cargo test
+
+cd ../milestone_contract
+cargo test
+```
+
+---
+
+## Dağıtım
+
+Tüm kontratların dağıtımını sağlayan bir `deploy_contracts.sh` betiği mevcuttur.
+
+### Dağıtım Scriptini Çalıştırma
+
+```bash
+./scripts/deploy_contracts.sh
+```
+
+Bu betik, tüm kontratları blokzincire otomatik olarak dağıtacaktır.
+
+---
+
+## Katkıda Bulunma
+
+Katkıda bulunmak isterseniz, lütfen bir **Pull Request (PR)** gönderin ya da projeyle ilgili bir **issue** açın. Her türlü katkı kabul edilir ve değerlendirilir.
+
+---
+
+## Lisans
+
+Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.
+
+---
+
+### Sonuç
+
+Charity Chain, topluluk odaklı bir bağış platformu olarak çeşitli modüllerle yapılandırılmıştır. Kullanıcıların bağış yapabileceği, NFT kazanabileceği ve projeleri topluluk oylamaları ile yönetebileceği bu platform, **CosmWasm** teknolojisi üzerine inşa edilmiştir.
